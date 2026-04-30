@@ -1,21 +1,27 @@
 ---
-name: workflow
+name: compact-workflow
 description: |
-  High-velocity solo development workflow. Idea to production same-day.
-  10 commands: plan, spike, ship, fix, review, spec-review, focus, done, drop, workflow.
-  Auto-activates on: "plan", "spec", "ship", "spike",
-  "fix", "debug", "repair",
-  "spec-review", "review spec", "analyze spec", "challenge spec",
-  "focus", "what should i do", "prioritize", "overwhelmed", "what should i work on",
-  "done", "finish", "complete", "drop", "abandon",
-  "workflow", "what's next", "whats next", "next step", "what now".
+  Compact variant of the workflow skill (forked from agent-skills/workflow).
+  Same 10 actions, invoked via "compact <subcommand>" prefix to coexist with upstream workflow.
+  Auto-activates on:
+  "compact spec", "compact plan", "compact spike",
+  "compact ship", "compact implement", "compact build",
+  "compact fix", "compact debug", "compact repair",
+  "compact review", "compact spec-review", "compact challenge spec",
+  "compact focus", "compact prioritize",
+  "compact done", "compact finish", "compact drop", "compact abandon",
+  "compact workflow", "compact status", "compact what's next",
+  "compact-workflow".
 license: MIT
 compatibility: "Agent-agnostic. Works with any agent that can read SKILL.md files and project rule conventions."
 metadata:
-  version: "1.2"
+  version: "0.1.0"
+  upstream: "agent-skills/workflow"
+  upstream_version: "1.2"
+  forked_from: "5f6f937ad7e0bd02d8cbfbf4e3db6e460f10e469"
 ---
 
-# Workflow
+# Compact Workflow
 
 High-velocity solo development. Idea to production same-day.
 
@@ -94,19 +100,17 @@ Don't know what to work on: `focus`
 ```
 User input
   │
-  ├─ "plan", "spec", "design"           → Load references/actions/plan.md
-  ├─ "spike", "explore", "investigate"   → Load references/actions/spike.md
-  ├─ "ship", "implement", "build"         → Load references/actions/ship.md
-  ├─ "fix", "debug", "repair"            → Load references/actions/fix.md
-  ├─ "review", "check code"              → Load references/actions/review.md
-  ├─ "review spec", "analyze spec",
-  │  "challenge spec"                    → Load references/actions/spec-review.md
-  ├─ "focus", "what should i do",
-  │  "prioritize", "overwhelmed"         → Load references/actions/focus.md
-  ├─ "done", "finish", "complete"        → Load references/actions/done.md
-  ├─ "drop", "abandon"                   → Load references/actions/drop.md
-  └─ "workflow", "what's next", "what now",
-     "what's up", "whats up", "status"  → Status Action (below)
+  ├─ "compact spec", "compact plan"                     → Load references/actions/plan.md
+  ├─ "compact spike", "compact explore"                 → Load references/actions/spike.md
+  ├─ "compact ship", "compact implement", "compact build" → Load references/actions/ship.md
+  ├─ "compact fix", "compact debug", "compact repair"   → Load references/actions/fix.md
+  ├─ "compact review"                                   → Load references/actions/review.md
+  ├─ "compact spec-review", "compact challenge spec"    → Load references/actions/spec-review.md
+  ├─ "compact focus", "compact prioritize"              → Load references/actions/focus.md
+  ├─ "compact done", "compact finish"                   → Load references/actions/done.md
+  ├─ "compact drop", "compact abandon"                  → Load references/actions/drop.md
+  └─ "compact workflow", "compact status",
+     "compact what's next", "compact-workflow"          → Status Action (below)
 ```
 
 **Loading rule:** Read the action file BEFORE executing. The action file contains all logic, task templates, and references needed.
@@ -121,11 +125,11 @@ No separate action file — logic is inline here. Detect current state, suggest 
 3. Check task list for in-progress items
 
 State → Suggestion:
-  No spec, no changes    → "Ready. Run: plan {idea}"
-  Active spec, no code   → "Spec ready. Run: ship"
-  Active spec, code WIP  → "In progress. Run: ship (resumes)"
-  Active spec, code done → "Ready to close. Run: done"
-  No spec, dirty tree    → "Uncommitted work. Run: ship (creates spec) or done"
+  No spec, no changes    → "Ready. Run: compact spec {idea}"
+  Active spec, no code   → "Spec ready. Run: compact ship"
+  Active spec, code WIP  → "In progress. Run: compact ship (resumes)"
+  Active spec, code done → "Ready to close. Run: compact done"
+  No spec, dirty tree    → "Uncommitted work. Run: compact ship (creates spec) or compact done"
 ```
 
 Output: Follow [status-output.md](references/templates/status-output.md).

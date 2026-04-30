@@ -1,39 +1,44 @@
-# Workflow - High-Velocity Solo Development
+# compact-workflow — High-Velocity Solo Development
 
 Idea to production same-day. Spec-first, quality-gated, pattern-driven.
+
+Fork of [agent-skills/workflow](https://github.com/bntvllnt/agent-skills). Invoked via `compact <subcommand>` prefix to coexist with the upstream skill.
+
+> **Note:** `/compact` is a Claude Code built-in command (transcript compression). Do not type `/compact` to invoke this skill — use `compact <subcommand>` (e.g. `compact spec`, `compact ship`).
 
 ## Install
 
 ```bash
-npx skills add bntvllnt/agent-skills --skill workflow
+ln -s ~/Documents/GitHub/compact-workflow/workflow ~/.claude/skills/compact-workflow
 ```
 
-Global:
+Verify:
+
 ```bash
-npx skills add bntvllnt/agent-skills --skill workflow -g
+ls ~/.claude/skills/compact-workflow/SKILL.md
 ```
 
 ## Commands
 
 | Command | What |
 |---------|------|
-| `plan {idea}` | Create spec with user journey, ACs, scope |
-| `spike {question}` | Time-boxed exploration, produces go/no-go |
-| `ship` or `ship {idea}` | Implement with build/review/fix loop |
-| `review` | Portable multi-perspective review spec with line-by-line + rule-by-rule coverage |
-| `focus` | Scan codebase, prioritize tasks toward production readiness |
-| `done` | Validate, retro, archive, propose memory update |
-| `drop` | Abandon with learnings preserved |
-| `workflow` | Show current state, suggest next action |
+| `compact spec {idea}` | Create spec with user journey, ACs, scope |
+| `compact spike {question}` | Time-boxed exploration, produces go/no-go |
+| `compact ship` or `compact ship {idea}` | Implement with build/review/fix loop |
+| `compact review` | Portable multi-perspective review spec with line-by-line + rule-by-rule coverage |
+| `compact focus` | Scan codebase, prioritize tasks toward production readiness |
+| `compact done` | Validate, retro, archive, propose memory update |
+| `compact drop` | Abandon with learnings preserved |
+| `compact workflow` | Show current state, suggest next action |
 
-No flags needed — the agent auto-detects intent from your natural language (e.g., "review the spec", "skip tests", "emergency fix", "production ready").
+No flags needed — the agent auto-detects intent from your natural language (e.g., "compact review the spec", "compact ship — skip tests", "compact ship — emergency fix").
 
 ## Portable review standard
 
-The `review` command is defined as a **core portable review spec**:
+The `compact review` command is defined as a **core portable review spec**:
 - the core contract defines what review must cover and what evidence it must emit
 - executors are optional implementation patterns that can be single-agent, multi-agent, CI, or human/manual
-- the workflow skill should stay runtime-neutral in open source
+- the compact-workflow skill stays runtime-neutral in open source
 
 See:
 - `references/reviews/core-portable-review-spec.md`
@@ -44,7 +49,7 @@ See:
 Don't know what to work on? Start with focus:
 
 ```
-You:   focus
+You:   compact focus
 
 Agent: Scanning codebase against 9 review perspectives...
        Goal: Production readiness
@@ -67,7 +72,7 @@ Agent: Scanning codebase against 9 review perspectives...
 Here's what a real workflow looks like end-to-end:
 
 ```
-You:   plan add JWT authentication
+You:   compact spec add JWT authentication
 
 Agent: Parsing idea...
        Tier: mini (estimated ~80 LOC)
@@ -98,9 +103,9 @@ Agent: Parsing idea...
        Dev-ready: READY
        Spec: specs/active/2025-01-29-jwt-auth.md
 
-       Next: Run `ship` to implement.
+       Next: Run `compact ship` to implement.
 
-You:   ship
+You:   compact ship
 
 Agent: Loading spec... mode: LOOP (3 scope items, max 5 iterations)
 
@@ -132,9 +137,9 @@ Agent: Loading spec... mode: LOOP (3 scope items, max 5 iterations)
          Must Have ACs: 2/2 ✓  Error ACs: 1/1 ✓  Scope: 3/3 ✓
          Gates: green  Blockers: 0
 
-       CLEAN — Ready. Run `done`.
+       CLEAN — Ready. Run `compact done`.
 
-You:   done
+You:   compact done
 
 Agent: Validating...
          All Must Have ACs [x] ✓
@@ -168,7 +173,7 @@ Agent: Validating...
 │  YOU                           AGENT                     OUTPUT     │
 │  ───                           ─────                     ──────     │
 │                                                                     │
-│  "plan add rate limiting"                                           │
+│  "compact spec add rate limiting"                                   │
 │       │                                                             │
 │       ├──────────────────▶  Parse idea                              │
 │                             Select tier: mini                       │
@@ -184,7 +189,7 @@ Agent: Validating...
 │                             Quality checklist                       │
 │                             Dev-readiness: READY ──────▶ spec file  │
 │                                                                     │
-│  "ship"                                                             │
+│  "compact ship"                                                     │
 │       │                                                             │
 │       ├──────────────────▶  Load spec, create tasks                 │
 │                             Iteration 1: middleware ──▶ lint ✓      │
@@ -206,7 +211,7 @@ Agent: Validating...
 │                             Update tasks                            │
 │                             RESUME loop ───────────────▶ continues  │
 │                                                                     │
-│  "done"                                                             │
+│  "compact done"                                                     │
 │       │                                                             │
 │       ├──────────────────▶  Validate all ACs ✓                     │
 │                             New tests exist ✓                       │
@@ -273,10 +278,10 @@ Start here
 ## How It Works
 
 ```
- YOU                          WORKFLOW                         OUTPUT
-──────                        ────────                         ──────
+ YOU                          COMPACT-WORKFLOW                  OUTPUT
+──────                        ───────────────                   ──────
 
- "focus"
+ "compact focus"
       │
       ├───────────────────▶  Scan specs (active/backlog/dropped/shipped)
                              Ask goal (production/MVP/infra/custom)
@@ -287,7 +292,7 @@ Start here
       │
       ├───────────────────▶  Create specs ───────────────────▶  specs/backlog/
 
- "plan {idea}"
+ "compact spec {idea}"
       │
       ├───────────────────▶  Parse idea
                              User journey (MANDATORY)
@@ -297,7 +302,7 @@ Start here
                              Plan review
                              Dev-readiness check ──────────▶  specs/active/{slug}.md
       │
- "ship"
+ "compact ship"
       │
       ├───────────────────▶  Detect mode (ONE-SHOT / LOOP)
                              Resume state check
@@ -310,7 +315,7 @@ Start here
                                       │ clean
                              Quality gates ────────────────▶  All ACs + scope [x]
       │
- "done"
+ "compact done"
       │
       ├───────────────────▶  Validate (ACs + tests + gates)
                              Capture retro
@@ -327,16 +332,16 @@ Start here
 ### Lifecycle
 
 ```
-┌──────────┐  focus  ┌──────────┐  plan   ┌──────────┐ review? ┌───────────┐
-│ UNFOCUSED│────────▶│   IDEA   │────────▶│  DRAFT   │────────▶│ REVIEWING │
-└──────────┘         └──────────┘         └──────────┘         └───────────┘
-      ▲                                        ▲                    │
-      │                                        │ revise [?][!]      │ ready?
-      │                                        └────────────────────┘
-      │                                                             │
-      │              ┌──────────┐                             ┌───────────┐
-      │              │IMPLEMENTING│◄───────────── ship ───────│ DEV_READY │
-      │              └─────┬─────┘                            └───────────┘
+┌──────────┐  compact   ┌──────────┐ compact  ┌──────────┐ review? ┌───────────┐
+│ UNFOCUSED│──focus────▶│   IDEA   │──spec───▶│  DRAFT   │────────▶│ REVIEWING │
+└──────────┘            └──────────┘          └──────────┘         └───────────┘
+      ▲                                            ▲                    │
+      │                                            │ revise [?][!]      │ ready?
+      │                                            └────────────────────┘
+      │                                                                 │
+      │              ┌──────────┐                               ┌───────────┐
+      │              │IMPLEMENTING│◄─────────── compact ship ───│ DEV_READY │
+      │              └─────┬─────┘                              └───────────┘
       │                    │
       │              ┌───────────┐
       │              │   SHIP    │──── iterate
@@ -344,8 +349,8 @@ Start here
       │              └─────┬─────┘
       │                    │ clean          │ stuck
       │              ┌──────────┐    ┌──────────┐
-      │   done       │  READY   │    │ DROPPED  │
-      └──────────────│          │    └──────────┘
+      │  compact     │  READY   │    │ DROPPED  │
+      └──────────────│  done    │    └──────────┘
                      └──────────┘     specs/dropped/
                           │
                      ┌──────────┐
@@ -373,7 +378,7 @@ Start here
 
 ## Customization
 
-Edit the skill files directly. Install at user-level or project-level, then modify to match your needs.
+Edit the skill files directly. Symlink at user-level or project-level, then modify to match your needs.
 
 ```
 workflow/
@@ -429,6 +434,10 @@ workflow/
 **Change memory update behavior:** Edit `memory-update.md` — adjust categories, agent targets, or disable proposals.
 
 ---
+
+## Attribution
+
+Forked from `agent-skills/workflow` (upstream SHA `5f6f937ad7e0bd02d8cbfbf4e3db6e460f10e469`). MIT license preserved. See `NOTICE.md` and `../CHANGES.md` for divergences.
 
 ## Key Principles
 

@@ -1,6 +1,6 @@
 # Core Portable Review Spec
 
-Tool-agnostic review contract for `workflow`'s `review` action.
+Tool-agnostic review contract for `compact-workflow`'s `review` action.
 
 Use this file to keep the review standard portable across agent runtimes, CI systems, and human/manual execution.
 
@@ -171,7 +171,7 @@ If multiple reviewers or systems contribute findings:
 
 ## Portability Rule
 
-The `workflow` skill must describe the review contract in a way that remains valid even when:
+The `compact-workflow` skill must describe the review contract in a way that remains valid even when:
 - no subagents exist
 - no external model CLIs exist
 - no CI exists

@@ -60,7 +60,7 @@ Possible adapters include:
 - editor-integrated review workflows
 - bespoke CI or scripting layers
 
-These are examples only. The core workflow skill should never require one of them by name.
+These are examples only. The core compact-workflow skill should never require one of them by name.
 
 ## Recommended OSS posture
 

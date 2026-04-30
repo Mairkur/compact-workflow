@@ -1,6 +1,6 @@
 # Status Output Template
 
-Edit this file to customize what the agent returns for `workflow` / status check. Decision logic: inline in [SKILL.md](../../SKILL.md#status-action).
+Edit this file to customize what the agent returns for `compact-workflow` / status check. Decision logic: inline in [SKILL.md](../../SKILL.md#status-action).
 
 ---
 
