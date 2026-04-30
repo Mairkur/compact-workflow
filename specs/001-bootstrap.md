@@ -92,8 +92,14 @@ Rationale: pristine first commit = clean diff base. Future `git merge upstream/m
 ```bash
 git fetch upstream
 git log upstream/main --oneline ^HEAD          # review upstream changes
-git merge upstream/main                         # resolve conflicts using CHANGES.md
-# fresh Claude Code session, run smoke tests (validation 6-7)
+
+# First sync only: repos have unrelated histories (fork init'd fresh, not cloned).
+# After first merge, histories are connected — flag not needed again.
+git merge upstream/main --allow-unrelated-histories   # first sync
+# git merge upstream/main                             # all subsequent syncs
+
+# Resolve conflicts using CHANGES.md — conflicts appear only on commit 2 edited lines.
+# fresh Claude Code session, run smoke tests (validation 7-9)
 git tag upstream-sync-$(date +%Y-%m-%d)
 ```
 
