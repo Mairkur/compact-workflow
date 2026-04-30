@@ -435,6 +435,22 @@ workflow/
 
 ---
 
+## Quality Guard
+
+compact-workflow gates every spec that modifies the skill itself with a **Quality Guard** (BLOCKING for dev-readiness and ship). Feature specs about user code are unaffected.
+
+**What it catches:** silent regressions like lost source attribution, document boundary erosion (tone modes leaking into spec files / code / commits), narrowed security triggers, broken action router, quality gate bypass, broken loading mechanisms, AC ↔ scope traceability loss, irreversible coupling between improvements.
+
+**Detection:** automatic. Spec touches `workflow/`, `CHANGES.md`, `NOTICE.md`, `LICENSE`, or `docs/` → skill-improvement → Quality Guard runs.
+
+**Rules:** 10 BLOCKING (Tier 1) + 8 WARN-eligible (Tier 2) + 2 informational (Tier 3). Mini-tier specs apply Tier 1 only (10 rules); standard-tier specs apply Tier 1 + Tier 2 (18 rules). Pre-fill heuristic auto-marks trivially-N/A rules to reduce checklist fatigue.
+
+**Disable:** no disable path. The Guard is BLOCKING by design — emergency-bypass is when quality slips most.
+
+**Version:** pinned per spec (`quality-guard-version: v1` in frontmatter). Revisions audit against pinned version, not mutable HEAD.
+
+Full rules, verdict rubric, violation report format, detection rule: see [`references/quality-guard.md`](references/quality-guard.md). Authoritative spec: `../specs/shipped/2026-04-30-skill-quality-guard.md`.
+
 ## Tone
 
 compact-workflow outputs in **caveman tone** by default (level: `full`). Drops articles, filler, pleasantries, hedging. Fragments OK. Technical accuracy preserved. ~65-75% token reduction on agent responses.

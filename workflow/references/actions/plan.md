@@ -1,6 +1,6 @@
 # Plan Action
 
-> **Agent:** Load this file when `plan` triggers. Also load `references/spec-template.md` — it defines spec structure and validation rules. Also load `references/rules-discovery.md` — plans must respect project/user conventions.
+> **Agent:** Load this file when `plan` triggers. Also load `references/spec-template.md` — it defines spec structure and validation rules. Also load `references/rules-discovery.md` — plans must respect project/user conventions. Also load `references/quality-guard.md` — gates skill-improvement specs (BLOCKING for dev-readiness when applicable).
 
 **BLOCKING: Never delegate planning to the host agent's built-in plan mode.**
 This skill manages its own planning by writing spec files to `specs/active/`.
@@ -189,6 +189,45 @@ Write results directly into spec's `## Analysis` section.
 - No passive observations — each finding forces a decision
 - If analysis reveals spec gaps → update spec before proceeding to Step 4
 
+## Step 3.7: Quality Guard Detection (CONDITIONAL — skill-improvement specs only)
+
+**Load `references/quality-guard.md` if not already loaded.**
+
+After Analysis is written, run the Detection Rule from `quality-guard.md`:
+
+```
+A spec is skill-improvement if its Codebase Impact table contains ANY of:
+  - Path under `workflow/`
+  - Repo-root file: `CHANGES.md`, `NOTICE.md`, `LICENSE`
+  - Path under `docs/`
+
+Hybrid spec (touches both skill paths AND user code) → classified as skill-improvement.
+```
+
+If detection does NOT match → skip this step entirely (zero overhead for feature specs).
+
+If detection MATCHES:
+
+1. Add `quality-guard-version: v1` to spec frontmatter
+2. Append `## Quality Guard Results` section per template in `references/spec-template.md`
+3. Apply tier-conditional enforcement:
+   - mini / trivial / micro → Tier 1 only (10 BLOCKING rules)
+   - standard → Tier 1 + Tier 2 (10 BLOCKING + 8 WARN-eligible rules)
+   - Tier 3 always informational
+4. Run pre-fill heuristic from `quality-guard.md`:
+   - QG-1 → N/A if no external source referenced
+   - QG-4 → N/A if no router file edits
+   - QG-7 → N/A if no new file references in SKILL.md
+   - QG-12 → N/A if no stateful overlay introduced
+   - QG-17 → N/A if no new triggers added
+5. Mark all other required-tier rules as `[ ] PENDING` for user/agent to fill
+6. Auditor narrates verdicts using `[QG-VIOLATION]` prefix marker for any FAIL (auto-clarity → normal prose)
+
+**Dev-readiness blocks until `## Quality Guard Results` is GUARD-CLEAN:**
+- Every Tier 1 rule = `PASS` or `NOT_APPLICABLE`
+- Every Tier 2 rule (standard tier only) = `PASS`, `NOT_APPLICABLE`, or `WARN` with concrete justification
+- No `FAIL`, no `PENDING`
+
 ## Step 4: Spec Review
 
 Before finalizing, self-verify:
@@ -247,7 +286,7 @@ Max 3 rounds. After round 3: must reach READY or user says "proceed anyway".
 
 **BLOCKING gate before `ship` can start.**
 
-Run the validation rules from `references/spec-template.md` (Validation Rules table). All 14 rules must pass.
+Run the validation rules from `references/spec-template.md` (Validation Rules table). All 14 rules must pass. Rule 15 applies to skill-improvement specs only — if applicable, GUARD-CLEAN required.
 
 ### Readiness Algorithm
 
@@ -257,14 +296,17 @@ ready_to_dev(spec):
 
   mandatory_fails = rules 1-8 that fail
   standard_fails = rules 9-14 that fail
+  guard_fails = rule 15 (skill-improvement specs only) — Quality Guard NOT GUARD-CLEAN
 
   IF len(all_fails) == 0:
     RETURN READY
-  ELIF mandatory_fails:
+  ELIF mandatory_fails OR guard_fails:
     RETURN NOT_READY (cannot proceed)
   ELIF only standard_fails:
     RETURN CONDITIONAL (can proceed with acknowledgment)
 ```
+
+**Rule 15 specifics:** If spec is classified as skill-improvement (per Detection Rule in `references/quality-guard.md`), the `## Quality Guard Results` section MUST be GUARD-CLEAN. Any Tier 1 FAIL or PENDING blocks dev-readiness. Tier 2 FAIL also blocks (Tier 2 may WARN with justification, but cannot FAIL).
 
 Additional checks (beyond template validation):
 

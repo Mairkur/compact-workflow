@@ -233,3 +233,29 @@ If action template instructs "write to spec file" → switch to normal prose for
 ### Source
 
 Rules sourced from [`JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman). Inline copy — no runtime dependency. Source SHA tracked in `CHANGES.md` and `references/tone/caveman.md`.
+
+## Quality Guard
+
+**Active for skill-improvement specs only — BLOCKING for dev-readiness and ship.**
+
+Every spec that modifies the compact-workflow skill itself (paths under `workflow/`, root files `CHANGES.md` / `NOTICE.md` / `LICENSE`, or paths under `docs/`) is gated by the Quality Guard. Feature specs (about user code) are unaffected.
+
+The Guard catches silent quality regressions:
+- Source attribution drift (lost upstream SHA in CHANGES.md)
+- Document boundary erosion (caveman or future tone modes leaking into spec files / code / commits)
+- Auto-clarity trigger narrowing (security warnings losing protection)
+- Action router corruption (existing `compact <cmd>` keywords broken)
+- Quality gate bypass (silent SKIPs added)
+- Loading mechanism breakage (file references that cannot be loaded)
+- AC ↔ scope traceability loss
+- Reversibility loss (improvements that cannot be cleanly reverted)
+
+**Tiers:** 10 BLOCKING (Tier 1) + 8 WARN-eligible (Tier 2) + 2 informational (Tier 3). Mini-tier specs apply Tier 1 only; standard-tier specs apply Tier 1 + Tier 2.
+
+**Version:** v1 (pinned in spec frontmatter as `quality-guard-version`). Spec revisions audit against pinned version, not mutable HEAD.
+
+**No bypass:** No `--force` flag. No emergency override. Detection is deterministic; pre-fill heuristic reduces friction for trivially-N/A rules; auditor narration uses `[QG-VIOLATION]` prefix marker for normal-prose enforcement.
+
+Full rules + detection + verdict rubric + violation report format: see [`references/quality-guard.md`](references/quality-guard.md).
+
+Authoritative spec: `specs/shipped/2026-04-30-skill-quality-guard.md`.

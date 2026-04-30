@@ -1,6 +1,6 @@
 # Ship Action
 
-> **Agent:** Load this file when `ship` triggers. Also load `references/quality-gates.md` for gate commands, `references/session-management.md` for resume/stuck detection, and `references/rules-discovery.md` — code must follow project/user rules.
+> **Agent:** Load this file when `ship` triggers. Also load `references/quality-gates.md` for gate commands, `references/session-management.md` for resume/stuck detection, and `references/rules-discovery.md` — code must follow project/user rules. Also load `references/quality-guard.md` if the active spec is classified as skill-improvement (Pre-iteration gate is BLOCKING when applicable).
 
 Implement features with a build/review/fix loop. Handles both quick one-shot and iterative spec-driven work.
 
@@ -35,6 +35,24 @@ Before starting any implementation, create tasks in your agent's built-in task/t
 ```
 
 Update tasks as you work: mark in-progress when starting, complete when done. One task in-progress at a time.
+
+## Phase 0a: Quality Guard Pre-Iteration Gate (CONDITIONAL — skill-improvement specs only)
+
+**BLOCKING. Runs before Phase 0 setup.**
+
+If active spec is classified as skill-improvement (per Detection Rule in `references/quality-guard.md`):
+
+1. Re-read the spec's `## Quality Guard Results` section
+2. Re-verify each rule against current spec state (spec may have changed since spec-review)
+3. If any Tier 1 rule is `FAIL` or `PENDING` → BLOCK ship. Report violations using `[QG-VIOLATION]` prefix marker.
+4. If any Tier 2 rule is `FAIL` (no justification) → BLOCK ship. Report violations.
+5. If all required-tier rules are `PASS`, `NOT_APPLICABLE`, or `WARN` (with justification) → Proceed to Phase 0.
+
+**This gate cannot be bypassed.** No `--force` flag. No emergency override. Per spec philosophy: emergency-bypass is when quality slips most.
+
+If gate blocks, fix the spec (update Quality Guard Results, re-run spec-review if needed), then re-run `compact ship`.
+
+If spec is NOT classified as skill-improvement → skip this phase entirely (zero overhead for feature specs).
 
 ## Phase 0: Setup
 

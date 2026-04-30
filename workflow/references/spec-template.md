@@ -45,6 +45,8 @@ Each section below shows: the template (what goes in the spec) then the generati
     created: {YYYY-MM-DD}
     estimate: {N}h
     tier: {trivial|micro|mini|standard}
+    # If skill-improvement spec (touches workflow/, CHANGES.md, NOTICE.md, LICENSE, or docs/), ALSO add:
+    # quality-guard-version: v1
     ---
 
     # {Feature Title}
@@ -449,6 +451,45 @@ Result: every scope ↔ at least 1 AC, bidirectional
 
 ---
 
+<!-- TEMPLATE: Quality Guard Results (CONDITIONAL — skill-improvement specs only) -->
+
+### Section: Quality Guard Results (CONDITIONAL)
+
+**Render this section ONLY when spec is classified as skill-improvement** (per Detection Rule in `references/quality-guard.md`):
+
+A spec is skill-improvement if its Codebase Impact table contains paths under `workflow/`, root files (`CHANGES.md`, `NOTICE.md`, `LICENSE`), or paths under `docs/`.
+
+If detection does NOT match → SKIP this section entirely. Feature specs gain zero overhead.
+
+**Spec output (skill-improvement specs only):**
+
+    ## Quality Guard Results
+
+    *Last run: {ISO_TIMESTAMP} — action: {plan|spec-review|ship} — quality-guard-version: v1*
+
+    Self-application of Quality Guard v{N} (see `references/quality-guard.md`).
+
+    | Rule | Tier | Verdict | Evidence | Notes |
+    |------|------|---------|----------|-------|
+    | QG-1 | 1 | {PASS|FAIL|N/A} | {file:line or section anchor} | {reason} |
+    | QG-2 | 1 | {PASS|FAIL|N/A} | {evidence} | {notes} |
+    | ...all required-tier rules per spec tier... |
+    | QG-19 | 3 | PASS | {improvement count} | Informational |
+    | QG-20 | 3 | PASS | {self-audit ran} | Informational |
+
+    **Final verdict:** {GUARD-CLEAN | NEEDS_FIXES}
+
+**Generation rules:**
+- Generated immediately after Analysis section
+- Pre-fill `NOT_APPLICABLE` for trivially-N/A rules per heuristic in `quality-guard.md`
+- All other rules start as `[ ] PENDING` until user/agent fills verdict
+- Tier-conditional enforcement per spec tier (mini = Tier 1 only, standard = Tier 1+2)
+- Tier 3 always informational
+- Block dev-readiness if any required-tier rule is `FAIL` or `PENDING`
+- Auditor uses `[QG-VIOLATION]` prefix marker when narrating violations (auto-clarity → normal prose)
+
+---
+
 ## Mini Tier Template
 
 For <100 LOC features. Same rules, shorter format. Codebase Impact + Journey + ACs still MANDATORY.
@@ -461,6 +502,8 @@ For <100 LOC features. Same rules, shorter format. Codebase Impact + Journey + A
     created: {YYYY-MM-DD}
     estimate: {N}h
     tier: mini
+    # If skill-improvement spec, ALSO add:
+    # quality-guard-version: v1
     ---
 
     # {Title}
@@ -539,6 +582,7 @@ A spec missing ANY of these cannot proceed to `ship`.
 | 12 | No uncovered AC | Must Have AC with no scope item → add scope | YES |
 | 13 | Analysis present | Assumptions + Blind Spots + Failure Hypotheses + Open Items sections exist | YES |
 | 14 | Test Strategy exists | Test Strategy section present with AC mapping + failure mode coverage | YES |
+| 15 | Quality Guard (skill-improvement specs only) | If spec is classified as skill-improvement (per `references/quality-guard.md` Detection Rule), `## Quality Guard Results` section exists AND is GUARD-CLEAN at the version pinned in frontmatter | YES — skill-improvement specs only |
 
 ---
 

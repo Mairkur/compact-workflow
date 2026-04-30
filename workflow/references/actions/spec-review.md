@@ -1,6 +1,6 @@
 # Spec Review Action
 
-> **Agent:** Load this file when `spec-review` triggers. Also load the active spec from `specs/active/` and `references/rules-discovery.md` — spec must not propose patterns that violate project/user rules.
+> **Agent:** Load this file when `spec-review` triggers. Also load the active spec from `specs/active/` and `references/rules-discovery.md` — spec must not propose patterns that violate project/user rules. Also load `references/quality-guard.md` if the active spec is classified as skill-improvement (per Detection Rule).
 
 Deep adversarial analysis of an active spec. Standalone — no dependency on analyze skill.
 
@@ -26,7 +26,8 @@ Read the spec's context, scope, codebase impact, and risks. Autonomously select 
 1. Identify the spec's domains from its content (code, SEO, marketing, data, infra, UX, legal, business, ops, content, security, performance, accessibility, etc.)
 2. Select 3-6 perspectives that would catch the most blind spots for THESE domains
 3. Always include 1 **Skeptic** (domain-agnostic adversarial thinker)
-4. Present selected perspectives to user before launching
+4. **If spec is classified as skill-improvement** (per Detection Rule in `references/quality-guard.md`): include **Quality Guard auditor** as REQUIRED 4th+ perspective. Auditor verdicts populate the spec's `## Quality Guard Results` section.
+5. Present selected perspectives to user before launching
 
 **Examples:**
 
@@ -92,6 +93,45 @@ If user says "merge" or "apply":
 - Add new risks to `## Risks` table
 - Add new ACs if findings warrant them
 - Note in spec's `## Notes`: "Spec review applied: {date}"
+- **If skill-improvement spec:** update `## Quality Guard Results` section with auditor verdicts. Any Tier 1 FAIL or Tier 2 FAIL = BLOCKING. Spec cannot be marked READY until GUARD-CLEAN. Auditor narration uses `[QG-VIOLATION]` prefix marker (auto-clarity → normal prose).
+
+### Step 7: Quality Guard Auditor (CONDITIONAL — skill-improvement specs only)
+
+If spec was classified as skill-improvement in Step 2, the auditor MUST run as a dedicated perspective with this prompt:
+
+```
+You are the Quality Guard auditor for compact-workflow v1.
+
+Apply every rule in `references/quality-guard.md` to this spec:
+
+SPEC:
+{full spec content}
+
+CONTEXT:
+{codebase files from Codebase Impact}
+
+QUALITY GUARD RULES:
+{full content of references/quality-guard.md}
+
+For each rule (QG-1 through QG-20):
+1. Determine verdict: PASS | WARN | FAIL | NOT_APPLICABLE
+2. Cite evidence (file path or section anchor)
+3. Note any violation with [QG-VIOLATION] prefix marker
+
+Apply tier-conditional enforcement:
+- mini / trivial / micro → Tier 1 only
+- standard → Tier 1 + Tier 2
+
+Tier 1 cannot WARN. Tier 1 verdicts are PASS, FAIL, or NOT_APPLICABLE only.
+
+Output a complete `## Quality Guard Results` table per the format in quality-guard.md.
+
+Final verdict: GUARD-CLEAN | NEEDS_FIXES (list violations).
+
+Spec is BLOCKED for ship if any Tier 1 FAIL or Tier 2 FAIL.
+```
+
+The auditor's output is merged into the spec's `## Quality Guard Results` section by Step 6.
 
 ---
 
