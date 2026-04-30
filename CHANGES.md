@@ -1,7 +1,22 @@
 # Divergences from upstream agent-skills/workflow
 
-Each entry: file, type (NEW | EDIT-frontmatter | EDIT-body | APPEND | COPY), reason.
-Future merger reads this to resolve conflicts with correct intent.
+Future merger reads this to resolve conflicts with correct intent. Also feeds Method B migration (see `docs/build-methods.md`) — `extractable: yes` entries map straight to overlay files.
+
+## Entry format (improvements after bootstrap)
+
+```
+- <improvement-name> — spec: specs/active/<file>.md
+  - <file>: <type> | anchor: <marker> | extractable: yes|no | <reason>
+```
+
+- **type**: `NEW` | `EDIT-frontmatter` | `EDIT-body` | `APPEND` | `COPY`
+- **anchor**: section heading or line range for splice edits; `n/a` for `NEW`/`APPEND`/`COPY`
+- **extractable**:
+  - `yes` — append-only, new file, or copy. Drop straight into Method B `improvements/`.
+  - `no` — inline splice. Needs anchor + manual overlay on migration.
+- **reason**: one-line why
+
+Bootstrap section below predates this format — kept as-is. Apply new format from caveman tone forward.
 
 ## Bootstrap (commit 2) — forked from 5f6f937ad7e0bd02d8cbfbf4e3db6e460f10e469
 
@@ -21,4 +36,9 @@ Future merger reads this to resolve conflicts with correct intent.
 - workflow/references/actions/review.md line 39: "workflow-level review policy" — generic concept
 
 ## Future improvements
-- <append entries here per improvement spec>
+
+- caveman-tone — spec: specs/shipped/2026-04-30-caveman-tone.md | shipped: 2026-04-30 | source: JuliusBrussee/caveman@84cc3c14fa1e10182adaced856e003406ccd250d
+  - workflow/SKILL.md: APPEND | anchor: `## Tone` (after References section) | extractable: yes | inline caveman rules + override clause + auto-clarity trigger list + spec-file boundary + persistence clause
+  - workflow/references/tone/caveman.md: NEW | anchor: n/a | extractable: yes | source attribution + caveman SHA + drift policy + local divergences from upstream caveman
+  - workflow/README.md: APPEND | anchor: before `## Attribution` section | extractable: yes | caveat: caveman default + how to disable + boundaries
+  - CHANGES.md: EDIT-body | anchor: this entry | extractable: n/a | self-reference (housekeeping)

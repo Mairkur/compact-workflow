@@ -435,6 +435,21 @@ workflow/
 
 ---
 
+## Tone
+
+compact-workflow outputs in **caveman tone** by default (level: `full`). Drops articles, filler, pleasantries, hedging. Fragments OK. Technical accuracy preserved. ~65-75% token reduction on agent responses.
+
+**Boundaries (always normal prose):**
+- Security warnings + destructive op confirmations (auto-clarity)
+- Code blocks, commit messages, PR bodies
+- Spec files, CHANGES.md, NOTICE.md, this README — anything written to disk
+
+**Switch level:** `compact tone lite` (drop only filler) | `compact tone full` (default) | `compact tone ultra` (max compression)
+
+**Disable:** Type `stop caveman` or `normal mode` in chat. Persists for session. Re-enable via `compact tone full`.
+
+Rules sourced from [`JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) (MIT). Inline copy in `SKILL.md` `## Tone` section. Audit trail: `references/tone/caveman.md`.
+
 ## Attribution
 
 Forked from `agent-skills/workflow` (upstream SHA `5f6f937ad7e0bd02d8cbfbf4e3db6e460f10e469`). MIT license preserved. See `NOTICE.md` and `../CHANGES.md` for divergences.
