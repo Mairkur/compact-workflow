@@ -447,7 +447,7 @@ compact-workflow gates every spec that modifies the skill itself with a **Qualit
 
 **Disable:** no disable path. The Guard is BLOCKING by design — emergency-bypass is when quality slips most.
 
-**Version:** pinned per spec (`quality-guard-version: v1` in frontmatter). Revisions audit against pinned version, not mutable HEAD.
+**Version:** v1.1 current HEAD; pinned per spec (`quality-guard-version: v1.1` in frontmatter). Revisions audit against pinned version, not mutable HEAD.
 
 Full rules, verdict rubric, violation report format, detection rule: see [`references/quality-guard.md`](references/quality-guard.md). Authoritative spec: `../specs/shipped/2026-04-30-skill-quality-guard.md`.
 

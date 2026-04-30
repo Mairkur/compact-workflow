@@ -1,8 +1,9 @@
 # Quality Guard
 
-> **Version: v1**
+> **Version: v1.1**
 > **Status: AUTHORITATIVE — loaded by `plan`, `spec-review`, `ship` actions when spec is classified as skill-improvement.**
 > **Spec source: `specs/shipped/2026-04-30-skill-quality-guard.md`**
+> **v1.1 corrigendum:** post-ship smoke audit added CHANGES.md-only pre-fill row + clarified QG-7 evidence narration. See `## Changelog` at end of file.
 
 The Quality Guard is a mandatory rule set that gates every spec which modifies the compact-workflow skill itself. Its purpose: prevent silent quality regressions in the fork (router corruption, narrowed security boundaries, broken loading mechanisms, traceability loss, source-attribution drift, etc.).
 
@@ -56,6 +57,8 @@ The agent auto-fills `NOT_APPLICABLE` for rules that are trivially N/A based on 
 | QG-17 | Spec does NOT add new trigger phrases or keywords → N/A |
 | QG-19 | Always evaluated (count check) — never auto-N/A |
 | QG-20 | Always evaluated (this rule = the meta-check) — never auto-N/A |
+
+**CHANGES.md-only specs** (housekeeping log entries; only `CHANGES.md` modified, no `workflow/` paths): auto-N/A QG-2 through QG-8 and QG-11 through QG-17 by definition. Active rules reduce to QG-1, QG-9, QG-10, QG-18, QG-19, QG-20 (6 active vs 18 default for standard tier). User confirms during spec-review (cannot pass silently). This relief applies to the spec where `Codebase Impact` lists `CHANGES.md` as the sole skill-path file.
 
 User MUST confirm pre-filled N/A values during spec-review (cannot pass silently).
 
@@ -283,7 +286,7 @@ Inline in the spec under section `## Quality Guard Results` (appended by `compac
 ```markdown
 ## Quality Guard Results
 
-*Last run: <ISO timestamp> — action: <plan|spec-review|ship> — quality-guard-version: v1*
+*Last run: <ISO timestamp> — action: <plan|spec-review|ship> — quality-guard-version: v1.1*
 
 | Rule | Tier | Verdict | Evidence | Notes |
 |------|------|---------|----------|-------|
@@ -341,7 +344,7 @@ When `compact ship` runs on skill-improvement spec:
 
 ## Versioning
 
-Quality Guard rules are versioned. Spec frontmatter pins `quality-guard-version: v1` at spec creation. Future revisions to the Quality Guard:
+Quality Guard rules are versioned. Spec frontmatter pins `quality-guard-version: <current HEAD>` (e.g. `v1.1`) at spec creation. Future revisions to the Quality Guard:
 
 1. Are themselves a skill-improvement spec (must pass Quality Guard at the version pinned in their own frontmatter)
 2. Increment version (e.g. `v2`) on the rule set itself
@@ -366,3 +369,20 @@ This avoids the bootstrap problem: a Quality Guard revision is audited against t
 ## Source
 
 Defined by spec `specs/shipped/2026-04-30-skill-quality-guard.md`. Full failure-mode analysis + spec-review history + self-application audit recorded there.
+
+---
+
+## Changelog
+
+### v1.1 (2026-04-30, post-ship corrigendum)
+
+Driven by post-ship smoke audit (read-only audit ran by general-purpose agent against shipped v1). Two findings, both informational:
+
+- **CHANGES.md-only friction** — Pre-fill heuristic now includes housekeeping shortcut: CHANGES.md-only specs auto-N/A QG-2..8 and QG-11..17, leaving 6 active rules (QG-1, QG-9, QG-10, QG-18, QG-19, QG-20). Reduces friction for trivial log-only specs without weakening the gate.
+- **QG-7 evidence narration imprecision** — Audit caught wording in shipped spec QG-7 evidence ("loads on phrase match"); actual mechanism is "loads on detection match" (action file header conditional load when spec is classified skill-improvement). Shipped-spec narration corrected; rule text unchanged.
+
+Per Quality Guard versioning rule, v1.1 is itself a skill-improvement → audited against pinned prior version v1. Corrigendum pattern: changes are additive (new pre-fill row) + narration-only (no rule semantics altered). No Tier 1 or Tier 2 rule wording changed; no SKIP added; no router edit. Logged in CHANGES.md.
+
+### v1 (2026-04-30, original ship)
+
+Initial Quality Guard. Spec: `specs/shipped/2026-04-30-skill-quality-guard.md`. Commit: `03eb1b5`.

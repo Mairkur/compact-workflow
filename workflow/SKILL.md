@@ -252,7 +252,7 @@ The Guard catches silent quality regressions:
 
 **Tiers:** 10 BLOCKING (Tier 1) + 8 WARN-eligible (Tier 2) + 2 informational (Tier 3). Mini-tier specs apply Tier 1 only; standard-tier specs apply Tier 1 + Tier 2.
 
-**Version:** v1 (pinned in spec frontmatter as `quality-guard-version`). Spec revisions audit against pinned version, not mutable HEAD.
+**Version:** v1.1 (current HEAD; pinned in spec frontmatter as `quality-guard-version`). Spec revisions audit against pinned version, not mutable HEAD.
 
 **No bypass:** No `--force` flag. No emergency override. Detection is deterministic; pre-fill heuristic reduces friction for trivially-N/A rules; auditor narration uses `[QG-VIOLATION]` prefix marker for normal-prose enforcement.
 

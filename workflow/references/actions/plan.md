@@ -208,7 +208,7 @@ If detection does NOT match → skip this step entirely (zero overhead for featu
 
 If detection MATCHES:
 
-1. Add `quality-guard-version: v1` to spec frontmatter
+1. Add `quality-guard-version: v1.1` (current HEAD) to spec frontmatter
 2. Append `## Quality Guard Results` section per template in `references/spec-template.md`
 3. Apply tier-conditional enforcement:
    - mini / trivial / micro → Tier 1 only (10 BLOCKING rules)

@@ -239,7 +239,7 @@ Self-application of Quality Guard v1 to this spec (AC-5, QG-20).
 | QG-4 | 1 | N/A | — | No router file edits; existing `compact <cmd>` keywords unchanged |
 | QG-5 | 1 | PASS | Adds gate (Quality Guard pre-iteration check), removes none; no `quality-gates.md` modification | — |
 | QG-6 | 1 | PASS | Spec template gains `## Quality Guard Results` section; required sections preserved | — |
-| QG-7 | 1 | PASS | `quality-guard.md` loads via action files (plan / spec-review / ship) on phrase match — confirmed loadable | — |
+| QG-7 | 1 | PASS | `quality-guard.md` loads via action files (plan / spec-review / ship) on detection match — action file header conditional load when spec classified skill-improvement | Narration corrected v1.1 (was: "phrase match") |
 | QG-8 | 1 | PASS | Portable review spec + executor patterns untouched; verdict vocabulary preserved | — |
 | QG-9 | 1 | PASS | All ACs map to scope: AC-1 → 1,2,3,6 / AC-2 → 1,4 / AC-3 → 1,5 / AC-4 → 2,3 / AC-5 → 10 / AC-6 → 4,5 / **AC-E1 → 9** (grandfather log) | Fixed via P-1 (scope item 9 added) |
 | QG-10 | 1 | PASS | Single-commit revert restores prior. Shipped specs immutable; orphan checklists in shipped specs acceptable (frozen at ship time) | Trade-off documented in Notes |

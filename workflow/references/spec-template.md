@@ -46,7 +46,7 @@ Each section below shows: the template (what goes in the spec) then the generati
     estimate: {N}h
     tier: {trivial|micro|mini|standard}
     # If skill-improvement spec (touches workflow/, CHANGES.md, NOTICE.md, LICENSE, or docs/), ALSO add:
-    # quality-guard-version: v1
+    # quality-guard-version: v1.1
     ---
 
     # {Feature Title}
@@ -465,7 +465,7 @@ If detection does NOT match → SKIP this section entirely. Feature specs gain z
 
     ## Quality Guard Results
 
-    *Last run: {ISO_TIMESTAMP} — action: {plan|spec-review|ship} — quality-guard-version: v1*
+    *Last run: {ISO_TIMESTAMP} — action: {plan|spec-review|ship} — quality-guard-version: v1.1*
 
     Self-application of Quality Guard v{N} (see `references/quality-guard.md`).
 
@@ -503,7 +503,7 @@ For <100 LOC features. Same rules, shorter format. Codebase Impact + Journey + A
     estimate: {N}h
     tier: mini
     # If skill-improvement spec, ALSO add:
-    # quality-guard-version: v1
+    # quality-guard-version: v1.1
     ---
 
     # {Title}
